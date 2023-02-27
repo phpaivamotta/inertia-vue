@@ -1,6 +1,10 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
+
+defineProps({
+    time: String,
+})
 </script>
 
 <template>
@@ -13,11 +17,18 @@ import { Head } from "@inertiajs/vue3";
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-12 mt-96">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 text-lg">
-                        you're logged in!
+                        The current time is: {{ time }}
+                        <Link 
+                            href="/users" 
+                            class="block text-sm text-blue hover:text-gray-700"
+                            preserve-scroll
+                        >
+                            Refresh time.
+                        </Link>
                     </div>
                 </div>
             </div>

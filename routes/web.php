@@ -34,7 +34,9 @@ Route::get('/settings', function () {
 })->middleware(['auth', 'verified'])->name('settings');
 
 Route::get('/users', function () {
-    return Inertia::render('Users');
+    return Inertia::render('Users', [
+        'time' => now()->toTimeString()
+    ]);
 })->middleware(['auth', 'verified'])->name('users');
 
 Route::middleware('auth')->group(function () {
