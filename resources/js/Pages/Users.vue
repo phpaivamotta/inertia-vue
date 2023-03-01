@@ -1,11 +1,23 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import Pagination from "@/Components/Pagination.vue"
-import { Head, Link } from "@inertiajs/vue3";
+import Pagination from "@/Components/Pagination.vue";
+import { Head, Link, router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
-defineProps({
+let props = defineProps({
     users: Object,
+    filters: Object,
 });
+
+let search = ref(props.filters.search);
+
+watch(search, value => {
+    router.get('/users', { search: value }, {
+        preserveState: true,
+        replace: true
+    });
+});
+
 </script>
 
 <template>
@@ -20,6 +32,26 @@ defineProps({
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- page title and description -->
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold mb-2">Users</h2>
+
+                        <p class="text-sm text-gray-600">
+                            A list of all the users in the application.
+                        </p>
+                    </div>
+
+                    <div>
+                        <input
+                            v-model="search"
+                            type="text"
+                            placeholder="Search..."
+                            class="rounded-lg h-8"
+                        />
+                    </div>
+                </div>
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="text-gray-900 text-lg">
                         <!-- Table -->
@@ -54,7 +86,10 @@ defineProps({
                 </div>
 
                 <!-- paginator -->
-                <Pagination :links="users.links" class="mt-6 flex justify-center"/>
+                <Pagination
+                    :links="users.links"
+                    class="mt-6 flex justify-center"
+                />
             </div>
         </div>
     </AuthenticatedLayout>
