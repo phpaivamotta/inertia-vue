@@ -1,9 +1,10 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import Pagination from "@/Components/Pagination.vue"
+import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
-    users: Array,
+    users: Object,
 });
 </script>
 
@@ -17,22 +18,43 @@ defineProps({
             </h2>
         </template>
 
-        <div class="py-12 mt-10">
+        <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 text-lg grid place-items-center">
-                        <h3 class="font-bold mb-6">
-                            A list of all users:
-                        </h3>
-                        <ul class="text-sm text-gray-500 list-disc">
-                            <li 
-                                v-for="user in users" 
-                                :key="user.id" 
-                                v-text="user.name"
-                            />
-                        </ul>
+                    <div class="text-gray-900 text-lg">
+                        <!-- Table -->
+                        <div
+                            class="relative overflow-x-auto shadow-md sm:rounded-lg"
+                        >
+                            <table
+                                class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                            >
+                                <tbody>
+                                    <tr
+                                        class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+                                        v-for="user in users.data"
+                                        :key="user.id"
+                                    >
+                                        <td class="px-6 py-4">
+                                            {{ user.name }}
+                                        </td>
+                                        <td class="flex justify-end px-6 py-4">
+                                            <Link
+                                                href="#"
+                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                                >Edit</Link
+                                            >
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Table -->
                     </div>
                 </div>
+
+                <!-- paginator -->
+                <Pagination :links="users.links" class="mt-6 flex justify-center"/>
             </div>
         </div>
     </AuthenticatedLayout>

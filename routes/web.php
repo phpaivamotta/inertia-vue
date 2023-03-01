@@ -26,21 +26,26 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function() {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');    
 
-Route::get('/settings', function () {
-    return Inertia::render('Settings');
-})->middleware(['auth', 'verified'])->name('settings');
+    Route::get('/settings', function () {
+        return Inertia::render('Settings');
+    })->name('settings');    
 
-Route::get('/users', function () {
-    return Inertia::render('Users', [
-        'users' => User::all()->map(fn($user) => [
-            'name' => $user->name
-        ])
-    ]);
-})->middleware(['auth', 'verified'])->name('users');
+    Route::get('/users', function () {
+        return Inertia::render('Users', [
+            'users' => User::paginate(10)->through(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name
+            ])
+        ]);
+    })->name('users');
+});
+
+// breeze
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
