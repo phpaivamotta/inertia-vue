@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
@@ -54,7 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
             'filters' => request()->only(['search']),
 
             'can' => [
-                'createUser' => Auth::user()->can('create', User::class)
+                'createUser' => Auth::user()->can('create', User::class),
             ]
         ]);
     })->name('users');
@@ -63,6 +64,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
         return Inertia::render('Users/Create');
     })->name('users.create')
     ->can('create', 'App\Models\User');
+
+    Route::get('/users/{user}/edit', function (User $user) {
+        return Inertia::render('Users/Edit', [
+            'user' => $user
+        ]);
+    })->name('users.edit');
+    // ->can('edit', 'user');
 
     Route::post('/users', function (Request $request) {
         // validate
@@ -81,6 +89,21 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
         return redirect()->route('users'); // ?
     })->name('users.store');
+
+    Route::put('/users/{user}', function (Request $request, User $user) {
+        // validate
+        $attributes = $request->validate([
+            'name' => ['string', 'max:255'],
+            'email' => ['string', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'password' => [Password::defaults()],
+        ]);
+
+        // persist
+        $user->update($attributes);
+
+        // redirect
+        return redirect()->route('users'); // ?
+    })->name('users.update');
 });
 
 // breeze

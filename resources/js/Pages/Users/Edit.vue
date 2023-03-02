@@ -7,26 +7,31 @@ import TextInput from "@/Components/TextInput.vue";
 import PageHeader from "@/Components/PageHeader.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 
+let props = defineProps({
+    user: Object,
+});
+
 const form = useForm({
-    name: "",
-    email: "",
+    name: props.user.name,
+    email: props.user.email,
     password: "",
+    id: props.user.id,
 });
 
 const submit = () => {
-    form.post(route("users.store"), {
+    form.put(route("users.update",  props.user.id), {
         onFinish: () => form.reset("password"),
     });
 };
 </script>
 
 <template>
-    <Head title="Create User" />
+    <Head title="Edit User" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Create User
+                Edit User
             </h2>
         </template>
 
@@ -35,11 +40,9 @@ const submit = () => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 text-lg">
                         <PageHeader>
-                            <template #title> Create User </template>
+                            <template #title> Edit User </template>
 
-                            <template #description>
-                                Create a new user.
-                            </template>
+                            <template #description> Edit user. </template>
                         </PageHeader>
 
                         <form @submit.prevent="submit">
@@ -99,7 +102,7 @@ const submit = () => {
                                     :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing"
                                 >
-                                    Create
+                                    Update
                                 </PrimaryButton>
                             </div>
                         </form>

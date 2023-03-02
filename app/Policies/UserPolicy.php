@@ -19,6 +19,6 @@ class UserPolicy
      */
     public function edit(User $user, User $model): bool
     {
-        return (bool) mt_rand(0, 1);
+        return ($model->id % 2) === 0;
     }
 }
