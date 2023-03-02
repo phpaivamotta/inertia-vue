@@ -60,6 +60,17 @@ const showingNavigationDropdown = ref(false);
                                     Users
                                 </NavLink>
                             </div>
+
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex"
+                            >
+                                <NavLink
+                                    :href="route('users.create')"
+                                    :active="route().current('users.create')"
+                                >
+                                    Create User
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">

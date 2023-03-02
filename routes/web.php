@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 /*
@@ -36,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     })->name('settings');    
 
     Route::get('/users', function () {
-        return Inertia::render('Users', [
+        return Inertia::render('Users/Index', [
             'users' => User::query()
                 ->when(request('search'), function($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
@@ -51,6 +54,28 @@ Route::middleware(['auth', 'verified'])->group(function() {
             'filters' => request()->only(['search'])
         ]);
     })->name('users');
+
+    Route::get('/users/create', function () {
+        return Inertia::render('Users/Create');
+    })->name('users.create');
+
+    Route::post('/users', function (Request $request) {
+        // validate
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', Password::defaults()],
+        ]);
+
+        // persist
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users'); // ?
+    })->name('users.store');
 });
 
 // breeze

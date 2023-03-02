@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
+import PageHeader from "@/Components/PageHeader.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
@@ -17,7 +18,6 @@ watch(search, value => {
         replace: true
     });
 });
-
 </script>
 
 <template>
@@ -34,13 +34,15 @@ watch(search, value => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <!-- page title and description -->
                 <div class="flex justify-between mb-4">
-                    <div>
-                        <h2 class="text-xl font-bold mb-2">Users</h2>
+                    <PageHeader>
+                        <template #title>
+                            Users
+                        </template>
 
-                        <p class="text-sm text-gray-600">
-                            A list of all the users in the application.
-                        </p>
-                    </div>
+                        <template #description>
+                            All users in the application.
+                        </template>
+                    </PageHeader>
 
                     <div>
                         <input
