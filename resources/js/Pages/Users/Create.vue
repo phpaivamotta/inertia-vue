@@ -7,10 +7,10 @@ import TextInput from "@/Components/TextInput.vue";
 import PageHeader from "@/Components/PageHeader.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 
-defineProps({
-    // canResetPassword: Boolean,
-    status: String,
-});
+// defineProps({
+//     canResetPassword: Boolean,
+//     status: String,
+// });
 
 const form = useForm({
     name: "",
@@ -61,13 +61,12 @@ const submit = () => {
                                     type="text"
                                     class="mt-1 block w-full"
                                     v-model="form.name"
-                                    required
                                     autocomplete="username"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.email"
+                                    :message="form.errors.name"
                                 />
                             </div>
 
@@ -79,7 +78,6 @@ const submit = () => {
                                     type="email"
                                     class="mt-1 block w-full"
                                     v-model="form.email"
-                                    required
                                     autocomplete="username"
                                 />
 
@@ -97,7 +95,6 @@ const submit = () => {
                                     type="password"
                                     class="mt-1 block w-full"
                                     v-model="form.password"
-                                    required
                                 />
 
                                 <InputError
