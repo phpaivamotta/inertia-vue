@@ -7,16 +7,10 @@ import TextInput from "@/Components/TextInput.vue";
 import PageHeader from "@/Components/PageHeader.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 
-// defineProps({
-//     canResetPassword: Boolean,
-//     status: String,
-// });
-
 const form = useForm({
     name: "",
     email: "",
     password: "",
-    // remember: false,
 });
 
 const submit = () => {
