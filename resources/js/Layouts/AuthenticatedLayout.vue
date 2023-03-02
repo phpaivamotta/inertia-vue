@@ -43,32 +43,10 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('settings')"
-                                    :active="route().current('settings')"
-                                >
-                                    Settings
-                                </NavLink>
-                            </div>
-
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex"
-                            >
-                                <NavLink
                                     :href="route('users')"
                                     :active="route().current('users')"
                                 >
                                     Users
-                                </NavLink>
-                            </div>
-
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('users.create')"
-                                    :active="route().current('users.create')"
-                                >
-                                    Create User
                                 </NavLink>
                             </div>
                         </div>
@@ -170,12 +148,21 @@ const showingNavigationDropdown = ref(false);
                     }"
                     class="sm:hidden"
                 >
-                    <div class="pt-2 pb-3 space-y-1">
+                    <div class="pt-2 space-y-1">
                         <ResponsiveNavLink
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                    </div>
+
+                    <div class="space-y-1">
+                        <ResponsiveNavLink
+                            :href="route('users')"
+                            :active="route().current('users')"
+                        >
+                            Users
                         </ResponsiveNavLink>
                     </div>
 

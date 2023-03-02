@@ -8,6 +8,7 @@ import { ref, watch } from "vue";
 let props = defineProps({
     users: Object,
     filters: Object,
+    can: Object
 });
 
 let search = ref(props.filters.search);
@@ -32,18 +33,18 @@ watch(search, value => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <PageHeader>
+                    <template #title>
+                        Users
+                    </template>
+
+                    <template #description>
+                        All users in the application.
+                    </template>
+                </PageHeader>
+
                 <!-- page title and description -->
-                <div class="flex justify-between mb-4">
-                    <PageHeader>
-                        <template #title>
-                            Users
-                        </template>
-
-                        <template #description>
-                            All users in the application.
-                        </template>
-                    </PageHeader>
-
+                <div class="flex justify-between my-4">
                     <div>
                         <input
                             v-model="search"
@@ -52,6 +53,10 @@ watch(search, value => {
                             class="rounded-lg h-8"
                         />
                     </div>
+
+                    <Link v-if="can.createUser" :href="route('users.create')" class="px-2 py-2 bg-blue-600 hover:bg-blue-800 rounded-md text-white">
+                        New User
+                    </Link>
                 </div>
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -74,6 +79,7 @@ watch(search, value => {
                                         </td>
                                         <td class="flex justify-end px-6 py-4">
                                             <Link
+                                                v-if="user.can.edit"
                                                 href="#"
                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                                 >Edit</Link

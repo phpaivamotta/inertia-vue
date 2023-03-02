@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
@@ -32,11 +33,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
-    })->name('dashboard');    
-
-    Route::get('/settings', function () {
-        return Inertia::render('Settings');
-    })->name('settings');    
+    })->name('dashboard');       
 
     Route::get('/users', function () {
         return Inertia::render('Users/Index', [
@@ -48,16 +45,24 @@ Route::middleware(['auth', 'verified'])->group(function() {
                 ->withQueryString()
                 ->through(fn($user) => [
                     'id' => $user->id,
-                    'name' => $user->name
+                    'name' => $user->name,
+                    'can' => [
+                        'edit' => auth()->user()->can('edit', $user)
+                    ]
                 ]),
 
-            'filters' => request()->only(['search'])
+            'filters' => request()->only(['search']),
+
+            'can' => [
+                'createUser' => Auth::user()->can('create', User::class)
+            ]
         ]);
     })->name('users');
 
     Route::get('/users/create', function () {
         return Inertia::render('Users/Create');
-    })->name('users.create');
+    })->name('users.create')
+    ->can('create', 'App\Models\User');
 
     Route::post('/users', function (Request $request) {
         // validate
